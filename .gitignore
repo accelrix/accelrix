@@ -1,0 +1,95 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env / secrets
+.env
+.env.*         # ignore any env variants (.env.local, .env.production, etc)
+.env.local
+.env.*.local
+.env.test
+.env.production
+.env.test.local
+.env.production.local
+
+# Google / service account keys and other credentials
+src/config/credentials.json
+credentials.json
+*.pem
+*.p12
+*.pfx
+*.key
+*.crt
+
+# Build output
+dist/
+build/
+lib/
+out/
+
+# Logs
+logs/
+*.log
+logs/*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Runtime data / uploads / cache
+tmp/
+temp/
+uploads/
+public/uploads/
+.cache/
+.svelte-kit/
+.next/
+.nuxt/
+coverage/
+.nyc_output/
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE / editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Container / deployment
+Dockerfile
+docker-compose.override.yml
+.dockerignore
+
+# Misc
+*.tgz
+*.zip
+*.tar.gz
+
+# Optional lockfiles (if you prefer not to version control them)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# PM2
+pm2.log
+pm2.pid
+pm2*.log
+
+# Mac/Windows swap files, editors
+*~
+*.swp
+*.swo
+
+# Secrets used in tests or local dev
+secrets/
+*.secret
+
+# Temporary credentials created by CI / local tooling
+ci-artifacts/
