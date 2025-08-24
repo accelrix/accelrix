@@ -2,24 +2,40 @@ const InternshipUser = require("../models/InternshipUser");
 
 exports.upsertSubmission = async (req, res) => {
   try {
-    const { internId, ...submissionData } = req.body;
+    const { internId, submission } = req.body;
 
-    if (!internId) {
+    if (!internId || !submission) {
       return res
         .status(400)
-        .json({ success: false, message: "Intern ID is required" });
+        .json({
+          success: false,
+          message: "internId and submission are required",
+        });
     }
 
-    // Build update object with dot notation
-    const updateObj = {};
-    for (const [key, value] of Object.entries(submissionData)) {
-      updateObj[`submission.${key}`] = value;
-    }
+    // Flatten submission object to dot notation
+    const flatten = (obj, parent = "submission") => {
+      let fields = {};
+      for (const [key, value] of Object.entries(obj)) {
+        if (
+          typeof value === "object" &&
+          value !== null &&
+          !Array.isArray(value)
+        ) {
+          fields = { ...fields, ...flatten(value, `${parent}.${key}`) };
+        } else {
+          fields[`${parent}.${key}`] = value;
+        }
+      }
+      return fields;
+    };
 
-    const updatedIntern = await InternshipUser.findOneAndUpdate(
+    const updateFields = flatten(submission);
+
+    const updatedIntern = await Intern.findOneAndUpdate(
       { internId },
-      { $set: updateObj },
-      { new: true, runValidators: true }
+      { $set: updateFields },
+      { new: true }
     );
 
     if (!updatedIntern) {
@@ -28,13 +44,13 @@ exports.upsertSubmission = async (req, res) => {
         .json({ success: false, message: "Intern not found" });
     }
 
-    res.status(200).json({
+    res.json({
       success: true,
-      message: "Submission upserted successfully",
-      data: updatedIntern,
+      message: "Submission updated",
+      intern: updatedIntern,
     });
   } catch (err) {
-    console.error("❌ Error upserting submission:", err);
-    res.status(500).json({ success: false, message: err.message });
+    console.error("❌ Error in upsertSubmission:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
