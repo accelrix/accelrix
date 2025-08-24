@@ -30,4 +30,11 @@ router.post(
   internController.markInternStatus
 );
 
+/**
+ * @route   GET /api/interns/all
+ * @desc    Fetch all interns from MongoDB
+ * @access  Private (requires API key)
+ */
+router.get("/all", apiKeyMiddleware, internController.getAllInterns);
+
 module.exports = router;

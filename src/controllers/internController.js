@@ -1,4 +1,3 @@
-// src/controllers/internController.js
 const InternshipUser = require("../models/InternshipUser");
 const googleSheetsService = require("../services/googleSheetsService");
 const asyncHandler = require("../utils/asyncHandler");
@@ -17,9 +16,9 @@ const internController = {
     const results = await Promise.all(
       interns.map(async (intern) => {
         return await InternshipUser.findOneAndUpdate(
-          { "personalDetails.email": intern.personalDetails.email }, // find by nested email
-          { $set: intern }, // update the whole document
-          { upsert: true, new: true, strict: false } // allow fields outside schema if needed
+          { "personalDetails.email": intern.personalDetails.email },
+          { $set: intern },
+          { upsert: true, new: true, strict: false }
         );
       })
     );
@@ -41,7 +40,6 @@ const internController = {
       throw new ApiError(400, "Intern ID is required");
     }
 
-    // ✅ Search using internId field, not _id
     const intern = await InternshipUser.findOne({ internId: id });
 
     if (!intern) {
@@ -87,6 +85,14 @@ const internController = {
     );
 
     res.json({ success: true, data: result });
+  }),
+
+  /**
+   * Fetch all interns
+   */
+  getAllInterns: asyncHandler(async (req, res) => {
+    const interns = await InternshipUser.find({});
+    res.status(200).json({ success: true, data: interns });
   }),
 };
 
