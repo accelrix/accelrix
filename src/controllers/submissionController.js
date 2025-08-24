@@ -10,9 +10,15 @@ exports.upsertSubmission = async (req, res) => {
         .json({ success: false, message: "Intern ID is required" });
     }
 
+    // Build update object with dot notation
+    const updateObj = {};
+    for (const [key, value] of Object.entries(submissionData)) {
+      updateObj[`submission.${key}`] = value;
+    }
+
     const updatedIntern = await InternshipUser.findOneAndUpdate(
       { internId },
-      { $set: { submission: submissionData } }, // put submission under intern
+      { $set: updateObj },
       { new: true, runValidators: true }
     );
 
