@@ -25,7 +25,7 @@ const internController = {
     const results = await Promise.all(
       validInterns.map(async (intern) => {
         return await InternshipUser.findOneAndUpdate(
-          { "personalDetails.email": intern.personalDetails.email },
+          { internId: intern.internId }, // use internId, not email
           { $set: intern },
           { upsert: true, new: true, strict: false }
         );
