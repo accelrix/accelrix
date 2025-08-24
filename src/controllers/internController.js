@@ -13,8 +13,17 @@ const internController = {
   bulkUpsert: asyncHandler(async (req, res) => {
     const { interns } = req.body;
 
+    // Only consider interns with valid internId and email
+    const validInterns = interns.filter(
+      (i) =>
+        i.internId &&
+        i.internId.trim() !== "" &&
+        i.personalDetails?.email &&
+        i.personalDetails.email.trim() !== ""
+    );
+
     const results = await Promise.all(
-      interns.map(async (intern) => {
+      validInterns.map(async (intern) => {
         return await InternshipUser.findOneAndUpdate(
           { "personalDetails.email": intern.personalDetails.email },
           { $set: intern },
