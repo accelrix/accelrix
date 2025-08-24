@@ -14,15 +14,12 @@ const internController = {
   bulkUpsert: asyncHandler(async (req, res) => {
     const { interns } = req.body;
 
-    // Implement your bulk upsert logic here
-    // Example: Create or update multiple interns
     const results = await Promise.all(
       interns.map(async (intern) => {
-        // Your upsert logic for each intern
         return await InternshipUser.findOneAndUpdate(
-          { email: intern.email }, // Find by email or other unique field
-          intern, // Update with new data
-          { upsert: true, new: true } // Create if doesn't exist
+          { "personalDetails.email": intern.personalDetails.email }, // find by nested email
+          { $set: intern }, // update the whole document
+          { upsert: true, new: true, strict: false } // allow fields outside schema if needed
         );
       })
     );

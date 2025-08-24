@@ -45,10 +45,6 @@ const internshipUserSchema = new mongoose.Schema(
         type: String,
         trim: true,
         lowercase: true,
-        match: [
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-          "Please provide a valid email",
-        ],
       },
       mobileNumber: { type: String, trim: true },
       highestAcademicQualification: { type: String, trim: true },
