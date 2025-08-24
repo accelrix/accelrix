@@ -5,12 +5,10 @@ exports.upsertSubmission = async (req, res) => {
     const { internId, submission } = req.body;
 
     if (!internId || !submission) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "internId and submission are required",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "internId and submission are required",
+      });
     }
 
     // Flatten submission object to dot notation
@@ -32,10 +30,11 @@ exports.upsertSubmission = async (req, res) => {
 
     const updateFields = flatten(submission);
 
-    const updatedIntern = await Intern.findOneAndUpdate(
-      { internId },
-      { $set: updateFields },
-      { new: true }
+    // Only update existing interns
+    const updatedIntern = await InternshipUser.findOneAndUpdate(
+      { internId }, // find existing
+      { $set: updateFields }, // merge submission fields
+      { new: true } // return updated doc
     );
 
     if (!updatedIntern) {
