@@ -9,6 +9,8 @@ const contactRoutes = require("./routes/contactRoutes");
 const internRoutes = require("./routes/internRoutes");
 const sheetRoutes = require("./routes/sheetRoutes");
 const authRoutes = require("./routes/auth");
+const submissionRoutes = require("./routes/submissionRoutes");
+
 
 // Import middleware
 const errorHandler = require("./middleware/errorHandler");
@@ -52,6 +54,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/interns", internRoutes);
 app.use("/api/sheet", sheetRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/submissions", submissionRoutes);
 
 // 404 handler for undefined routes
 app.use("*", (req, res) => {
